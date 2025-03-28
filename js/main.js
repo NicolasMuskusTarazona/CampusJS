@@ -1,10 +1,15 @@
 //Agregamos una lista en html y el json cambia
 const saveProduct = async(data) => {
+    const url = new URL("https://67e686856530dbd311105617.mockapi.io")
+    url.pathname = "/products"
+    const header = new Headers()
+    header.append("Content-Type", "application/json")
     const config = {
         method: "POST", //Guardar
+        headers: header,
         body: JSON.stringify(data)
     }
-    const reponse = await fetch("http://127.0.0.1:5600/products",config)
+    const reponse = await fetch(url.toString(),config)
     const result = await reponse.json()
     return result
 }
@@ -23,11 +28,16 @@ while(confirm("¿ Deasea insertar un dato ?")) {
 
 const editProduct = async(data) =>{
     const {id, ...dataUpdate} = data
-    const config ={
-        method: "PATCH", // Actualizar datos especificos
+    const url = new URL("https://67e686856530dbd311105617.mockapi.io")
+    url.pathname = `/products/${id}`
+    const header = new Headers()
+    header.append("Content-Type", "application/json")
+    const config = {
+        method: "PUT", //Actualizar
+        headers: header,
         body: JSON.stringify(dataUpdate)
     }
-    const reponse = await fetch(`http://127.0.0.1:5600/products${id}`,config)
+    const reponse = await fetch(url.toString(),config)
     const result = await reponse.json()
     return result
 }
@@ -44,17 +54,101 @@ while (confirm("¿ Deseas actualizar un producto?")){
 }
 
 const deleteProduct = async(data) =>{
-    const {id} = data
+    const {id, ...dataUpdate} = data
+    const url = new URL("https://67e686856530dbd311105617.mockapi.io")
+    url.pathname = `/products/${id}`
+    const header = new Headers()
+    header.append("Content-Type", "application/json")
     const config ={
         method: "DELETE",
+        headers: header,
+        body: JSON.stringify(dataUpdate)
     }
-    const reponse = await fetch(`http://127.0.0.1:5600/products${id}`,config)
+    const reponse = await fetch(url.toString(),config)
+    const result = await reponse.json()
+    return result
+}
+while (confirm("¿ Deseas eliminar un producto?")){
+    const data = {}
+    data.id = prompt("Ingrese el id del producto a eliminar")
+    if(confirm("¿Desea eliminar el producto?"))
+    deleteProduct(data)
+    .then(result => alert(JSON.stringify(result)))
+    .catch(error => alert(error))
+}
+
+const saveUser = async(data) => {
+    const url = new URL("https://67e686856530dbd311105617.mockapi.io")
+    url.pathname = "/users"
+    const header = new Headers()
+    header.append("Content-Type", "application/json")
+    const config = {
+        method: "POST", //Guardar
+        headers: header,
+        body: JSON.stringify(data)
+    }
+    const reponse = await fetch(url.toString(),config)
     const result = await reponse.json()
     return result
 }
 
-while(confirm("¿ Deseas eliminar un producto?")){
+while(confirm("¿ Deasea insertar un usuario ?")) {
+    const data = {
+        id : prompt("Ingresa el id", "6"),
+        name: prompt("Ingrese el nombre", "Nicolas"),
+        last: prompt("Ingrese el apellido", "Muskus"),
+    }
+    saveUser(data)
+    .then(result => alert(JSON.stringify(result)))
+    .catch(error => alert(error))
+}
+
+const editUser = async(data) =>{
+    const {id, ...dataUpdate} = data
+    const url = new URL("https://67e686856530dbd311105617.mockapi.io")
+    url.pathname = `/users/${id}`
+    const header = new Headers()
+    header.append("Content-Type", "application/json")
+    const config = {
+        method: "PUT", //Actualizar
+        headers: header,
+        body: JSON.stringify(dataUpdate)
+    }
+    const reponse = await fetch(url.toString(),config)
+    const result = await reponse.json()
+    return result
+}
+
+while (confirm("¿ Deseas actualizar un usuario")){
     const data = {}
-    data.id = prompt("Ingrese la id del producto que desea eliminar", "Mic330")
-    data.name = (confirm("¿Desea eliminar el nombre del producto")) ? (alert("Nom"))
+    data.id = prompt("Ingrese el id del usuario a actualizar", "1")
+    data.name = (confirm("¿Desea actualizar el nombre del usuario ?")) ? prompt("Ingrese el nuevo nombre del usuario") : undefined
+    if(confirm("¿Desea actualizar el apellido del usuario ?")) data.last = prompt("Ingrese el nuevo apellido del usuario")
+    editUser(data)
+    .then(result => alert(JSON.stringify(result)))
+    .catch(error => alert(error))
+}
+
+const deleteUser = async(data) =>{
+    const {id, ...dataUpdate} = data
+    const url = new URL("https://67e686856530dbd311105617.mockapi.io")
+    url.pathname = `/users/${id}`
+    const header = new Headers()
+    header.append("Content-Type", "application/json")
+    const config ={
+        method: "DELETE",
+        headers: header,
+        body: JSON.stringify(dataUpdate)
+    }
+    const reponse = await fetch(url.toString(),config)
+    const result = await reponse.json()
+    return result
+}
+while (confirm("¿ Deseas eliminar un producto?")){
+    const data = {}
+    data.id = prompt("Ingrese el id del usuario a eliminar")
+    if(confirm("¿Desea eliminar el usuario?"))
+    deleteUser(data)
+    .then(result => alert(JSON.stringify(result)))
+    .catch(error => alert(error))
 }
